@@ -1,0 +1,2 @@
+# Prisma client regen must not retrigger serve/watch rebuilds
+apps/blogging-auth/src/generated/prisma

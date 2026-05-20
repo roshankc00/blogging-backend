@@ -6,16 +6,21 @@
   "tags": [],
   "targets": {
     "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
       "dependsOn": ["generate-types"],
-      "executor": "nx:run-commands",
+      "defaultConfiguration": "production",
       "options": {
-        "command": "webpack-cli build",
-        "args": ["--node-env=production"],
-        "cwd": "apps/blogging-auth"
+        "target": "node",
+        "outputPath": "dist/apps/blogging-auth",
+        "webpackConfig": "apps/blogging-auth/webpack.config.js"
       },
       "configurations": {
         "development": {
-          "args": ["--node-env=development"]
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
         }
       }
     },
@@ -68,9 +73,17 @@
       }
     },
     "generate-types": {
-      "command": "npx prisma generate",
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/prisma/schema.prisma",
+        "{projectRoot}/prisma/migrations/**/*",
+        "{projectRoot}/prisma.config.ts"
+      ],
+      "outputs": ["{projectRoot}/src/generated/prisma"],
       "options": {
-        "cwd": "apps/blogging-auth/prisma"
+        "command": "npx prisma generate",
+        "cwd": "apps/blogging-auth"
       }
     },
     "migrate-prisma": {

@@ -1,7 +1,8 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from './models/user.model';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { GraphQLResolveInfo } from 'graphql';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -13,7 +14,8 @@ export class UsersResolver {
     }
 
     @Query(() => [User], { name: 'users' })
-    async getUsers() {
+    async getUsers(@Info() info: GraphQLResolveInfo) {
+        console.log(info, "yoyoyo");
         return this.usersService.getUsers();
     }
 }
